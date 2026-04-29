@@ -1,6 +1,10 @@
 <?php
-namespace SIM\POSITIONALACCOUNTS;
-use SIM;
+namespace TSJIPPY\POSITIONALACCOUNTS;
+use TSJIPPY;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 add_action( 'rest_api_init', __NAMESPACE__.'\bioRestApi');
 function bioRestApi() {
@@ -26,7 +30,7 @@ function bioRestApi() {
 
 function switchAccount(){
     // Check if valid request
-    if(!isset($_POST['switch-account']) || !is_numeric($_POST['switch-account']) || !wp_verify_nonce($_POST['nonce'], 'sim_switch_account')){
+    if(!isset($_POST['switch-account']) || !is_numeric($_POST['switch-account']) || !wp_verify_nonce($_POST['nonce'], 'tsjippy_switch_account')){
         return;
     }
 
@@ -39,7 +43,7 @@ function switchAccount(){
         echo "<div class='error'>This account is not linked to your account!</div>";
     }
 
-    SIM\storeInTransient('orgaccount', $user->ID);
+    TSJIPPY\storeInTransient('orgaccount', $user->ID);
 
     session_write_close();
 

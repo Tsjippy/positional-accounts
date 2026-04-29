@@ -1,6 +1,13 @@
 <?php
-namespace SIM\POSITIONALACCOUNTS;
-use SIM;
+namespace TSJIPPY\POSITIONALACCOUNTS;
+use TSJIPPY;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+//TO DO
+// build switch account block
 
 //add switch account buttons
 add_filter('wp_nav_menu_items', __NAMESPACE__.'\menuItems', 1, 2);
@@ -12,11 +19,11 @@ function menuItems($items, $args) {
 
     $user       = wp_get_current_user();
     $userId     = $user->ID;
-    $nonce      = wp_create_nonce('sim_switch_account');
+    $nonce      = wp_create_nonce('tsjippy_switch_account');
 
     $subItems   = '';
 
-    $profilePicture = SIM\displayProfilePicture($userId, [20, 20], false, false, false);
+    $profilePicture = TSJIPPY\displayProfilePicture($userId, [20, 20], false, false, false);
 
     $style      = '';
     if(wp_is_mobile()){
@@ -32,7 +39,7 @@ function menuItems($items, $args) {
         return $items;
     }
 
-    wp_enqueue_script('sim_positional_script');
+    wp_enqueue_script('tsjippy_positional_script');
 
     foreach($linkedAccountIds as $linkedAccountId){
         if(!is_numeric($linkedAccountId)){
@@ -45,7 +52,7 @@ function menuItems($items, $args) {
         }
 
         if(!$profilePicture){
-            $profilePicture = SIM\displayProfilePicture($linkedAccountId, [20, 20], true, false, false);
+            $profilePicture = TSJIPPY\displayProfilePicture($linkedAccountId, [20, 20], true, false, false);
         }
 
         // Add switch back to the linked account

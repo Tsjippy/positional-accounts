@@ -1,0 +1,86 @@
+<?php
+namespace TSJIPPY\POSITIONALACCOUNTS;
+use TSJIPPY;
+
+use function TSJIPPY\addElement;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu{
+
+    public function __construct($settings, $name){
+        parent::__construct($settings, $name);
+    }
+
+    public function settings($parent){
+        return false;
+    }
+
+    public function emails($parent){
+        return false;
+    }
+
+    public function data($parent=''){
+        $args = array(
+            'meta_query' => array(
+                array(
+                    'key' 		=> 'account-type',
+                    'value' 	=> 'positional',
+                    'compare' 	=> '='
+                )
+            )
+        );
+        $users      = get_users($args);
+
+        if(empty($users)){
+            return false;
+        }
+
+        $url		= TSJIPPY\ADMIN\getDefaultPageLink('usermanagement', 'user-edit-page')."?user-id=";
+
+        // Show a table with one positional account per row and all the accounts linked to it.
+        $table  = addElement('table', $parent, ['class' => 'tsjippy table']);
+        $tr     = addElement('tr', $table);
+        addElement('th', $tr, [], 'Name');
+        addElement('th', $tr, [], 'Linked to');
+
+
+        foreach($users as $user){
+            $linkedUserIds 	= get_user_meta($user->ID, 'linked-accounts', true);
+
+            $name			= "No user linked to this account <a href='$url$user->ID&main-tab=login-info'>Link now</a>";
+
+            if(is_array($linkedUserIds)){
+                $names	= [];
+                foreach($linkedUserIds as $linkedUserId){
+                    $linkedUser		= get_user($linkedUserId);
+
+                    if($linkedUser){
+                        $names[]		= $linkedUser->display_name;
+                    }
+                }
+
+                if(!empty($names)){
+                    $name	= implode("\n", $names);
+                }
+
+                $tr     = addElement('tr', $table);
+
+                $td     = addElement('td', $table);
+                addElement('a', $td, ['href' => "$url$user->ID&main-tab=login-info"]);
+
+                
+                $td     = addElement('td', $table, [], $name);
+            }	
+        }
+
+        return true;
+    }
+
+    public function functions($parent){
+
+        return false;
+    }
+}

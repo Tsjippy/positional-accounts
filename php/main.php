@@ -1,8 +1,12 @@
 <?php
-namespace SIM\POSITIONALACCOUNTS;
-use SIM;
+namespace TSJIPPY\POSITIONALACCOUNTS;
+use TSJIPPY;
 
-add_action('sim-after-login-settings', __NAMESPACE__.'\addConditionalAccountSettings', 10, 2);
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+add_action('tsjippy-after-login-settings', __NAMESPACE__.'\addConditionalAccountSettings', 10, 2);
 
 /**
  * Prints the forms to change an account type and to link a positional account to a personal account
@@ -33,14 +37,14 @@ function addConditionalAccountSettings($userId, $nonce){
             $linkedAccountIds	= [];
         }
 
-        echo SIM\userSelect("Link to an user account", true, false, '', 'linked_accounts', [], $linkedAccountIds, [1], 'select', '', true);
+        echo TSJIPPY\userSelect("Link to an user account", true, false, '', 'linked_accounts', [], $linkedAccountIds, [1], 'select', '', true);
         ?>
         <input type='submit' name='action' value='Link now' class='button small'>
     </form>
     <?php
 }
 
-add_action('sim-login-settings-save', __NAMESPACE__.'\updateAccountType', 10, 2);
+add_action('tsjippy-login-settings-save', __NAMESPACE__.'\updateAccountType', 10, 2);
 function updateAccountType($userId, $name){
     if($_REQUEST['action'] == 'Change account type'){
         update_user_meta($userId, 'account-type', $_REQUEST['type']);
@@ -101,7 +105,7 @@ function updateAccountType($userId, $name){
     }
 }
 
-add_filter('sim-generics-form', __NAMESPACE__.'\showPositionalForm', 10, 2);
+add_filter('tsjippy-generics-form', __NAMESPACE__.'\showPositionalForm', 10, 2);
 function showPositionalForm($html, $userId){
     if(checkIfNormal('', $userId)){
         return $html;
@@ -114,8 +118,8 @@ function showPositionalForm($html, $userId){
         $inkedUser			= get_user($linkedAccountId);
         if(!empty($linkedAccountId) && $inkedUser){
             $nameHtml			= $inkedUser->display_name;
-            if(function_exists('SIM\USERPAGES\getUserPageUrl')){
-                $url = SIM\maybeGetUserPageUrl($inkedUser->ID);
+            if(function_exists('TSJIPPY\USERPAGES\getUserPageUrl')){
+                $url = TSJIPPY\maybeGetUserPageUrl($inkedUser->ID);
                 if($url){
                     $nameHtml	= "<a href='$url' target='_blank'>$nameHtml</a>";
                 }
@@ -138,21 +142,21 @@ function showPositionalForm($html, $userId){
 }
 
 // Most forms do not apply to positional accounts
-add_filter('sim-should-show-family-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
-add_filter('sim-should-show-location-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
-add_filter('sim-should-show-picture-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
-add_filter('sim-should-show-security-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
-add_filter('sim-should-show-vaccination-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
+add_filter('tsjippy-should-show-family-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
+add_filter('tsjippy-should-show-location-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
+add_filter('tsjippy-should-show-picture-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
+add_filter('tsjippy-should-show-security-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
+add_filter('tsjippy-should-show-vaccination-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
 
 // no mandatory documents for positional accounts
-add_filter('sim-must-read',__NAMESPACE__.'\checkIfNormal', 10, 2);
+add_filter('tsjippy-must-read',__NAMESPACE__.'\checkIfNormal', 10, 2);
 
 function checkIfNormal( $isNormal, $userId=''){
     return getAccountType($userId) != 'positional';
 }
 
 // No recommended fields for positional user accounts
-add_filter("sim_manadatory_html_filter", __NAMESPACE__.'\filterPositionalAccount', 10, 2);
+add_filter("tsjippy_manadatory_html_filter", __NAMESPACE__.'\filterPositionalAccount', 10, 2);
 function filterPositionalAccount($html, $userId){
 	if(getAccountType($userId) == 'positional'){
 		return '';
@@ -171,7 +175,7 @@ function getAccountType($userId=''){
 }
 
 // Show the details of the person linked to a positional account and not the positional account details
-add_filter('sim-user-description-user-id', __NAMESPACE__.'\userDescriptionId');
+add_filter('tsjippy-user-description-user-id', __NAMESPACE__.'\userDescriptionId');
 function userDescriptionId($userId){
     $linkedAccountIds    = get_user_meta($userId, 'linked-accounts', true);
 
