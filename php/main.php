@@ -146,7 +146,6 @@ add_filter('tsjippy-should-show-family-form',__NAMESPACE__.'\checkIfNormal', 10,
 add_filter('tsjippy-should-show-location-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
 add_filter('tsjippy-should-show-picture-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
 add_filter('tsjippy-should-show-security-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
-add_filter('tsjippy-should-show-vaccination-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
 
 // no mandatory documents for positional accounts
 add_filter('tsjippy-must-read',__NAMESPACE__.'\checkIfNormal', 10, 2);
