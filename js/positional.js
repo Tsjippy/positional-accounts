@@ -1,4 +1,4 @@
-import {webAuthVerification} from './../../login/js/partials/webauth.js';
+import {webAuthVerification} from './../../tsjippy-login/js/partials/webauth.js';
 
 async function verifyAccountSwitch(target){
     let targetAccountId = target.dataset.accountid;
