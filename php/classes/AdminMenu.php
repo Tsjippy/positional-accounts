@@ -38,7 +38,16 @@ class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu{
             return false;
         }
 
-        $url		= TSJIPPY\ADMIN\getDefaultPageLink('usermanagement', 'user-edit-page')."?user-id=";
+        $url		= '';
+        if(defined('TSJIPPY\USERMANAGEMENT\SETTINGS')){
+            $url   = get_permalink(TSJIPPY\USERMANAGEMENT\SETTINGS['user-edit-page'] ?? '');
+
+            if(!$url){
+                $url = '';
+            }
+        }
+
+        $url		= "?user-id=";
 
         // Show a table with one positional account per row and all the accounts linked to it.
         $table  = addElement('table', $parent, ['class' => 'tsjippy table']);
