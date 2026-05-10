@@ -30,7 +30,7 @@ function bioRestApi() {
 
 function switchAccount(){
     // Check if valid request
-    if(!isset($_POST['switch-account']) || !is_numeric($_POST['switch-account']) || !wp_verify_nonce($_POST['nonce'], 'tsjippy_switch_account')){
+    if(!isset($_POST['switch-account']) || !is_numeric($_POST['switch-account']) || !TSJIPPY\verifyNonce('nonce', 'tsjippy_switch_account')){
         return;
     }
 
