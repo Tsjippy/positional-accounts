@@ -4,13 +4,20 @@
 ### Added
 
 ### Changed
+
+### Fixed
+
+### Updated
+
+## [10.0.5] - 2026-05-11
+
+
+### Changed
 - js update
 - implemented new verifyNonce function
 
 ### Fixed
 - account page retrieval
-
-### Updated
 
 ## [10.0.3] - 2026-05-06
 
