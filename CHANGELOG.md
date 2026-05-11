@@ -5,6 +5,7 @@
 
 ### Changed
 - js update
+- implemented new verifyNonce function
 
 ### Fixed
 - account page retrieval
