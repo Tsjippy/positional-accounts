@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
- - foreach bug
 
 ### Updated
+
+## [10.0.6] - 2026-05-26
+
+
+### Fixed
+ - foreach bug
 
 ## [10.0.5] - 2026-05-11
 
