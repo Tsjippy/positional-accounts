@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+ - foreach bug
 
 ### Updated
 
