@@ -112,7 +112,10 @@ function showPositionalForm($html, $userId){
     }
 
     $linkedAccountIds	= get_user_meta($userId, 'linked-accounts', true);
-
+    if(empty($linkedAccountIds))(
+        $linkedAccountIds = [];
+    }
+    
     $userNames  = [];
     foreach($linkedAccountIds as $linkedAccountId){
         $inkedUser			= get_user($linkedAccountId);
