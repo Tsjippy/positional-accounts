@@ -40,7 +40,11 @@ function switchAccount(){
 
     // check if the current user has permission to switch to this account
     if(empty($linkedAccountIds) || !is_array($linkedAccountIds) || !in_array($_POST['switch-account'], $linkedAccountIds)){
-        echo "<div class='error'>This account is not linked to your account!</div>";
+        ?>
+        <div class='error'>
+            This account is not linked to your account!
+        </div>
+        <?php
     }
 
     TSJIPPY\storeInTransient('orgaccount', $user->ID);
@@ -53,7 +57,7 @@ function switchAccount(){
     do_action( 'wp_logout', $user->ID );
 
     // Login the new user
-    wp_set_current_user($_POST['switch-account']);  
+    wp_set_current_user((int)$_POST['switch-account']);  
 
     // add a filter to allow passwordless sign in
     add_filter( 'authenticate', __NAMESPACE__.'\allowPasswordlessLogin', 999, 3 );
@@ -62,13 +66,19 @@ function switchAccount(){
     add_action( 'set_logged_in_cookie', __NAMESPACE__.'\storeInCookieVar', 10, 6 );
 
     // perform the login
-    $user = wp_signon(['remember'=>true]);
+    $user = wp_signon(
+        [
+            'user_login'    => '',
+            'user_password' => '',
+            'remember'      => true
+        ]
+    );
 
     // Remove action to store the login cookie in $_COOKIE
     remove_action( 'set_logged_in_cookie', __NAMESPACE__.'\storeInCookieVar' );
 
     // remove the filter to allow passwordless sign in
-    remove_filter( 'authenticate', __NAMESPACE__.'\allowPasswordlessLogin', 999, 3 );
+    remove_filter( 'authenticate', __NAMESPACE__.'\allowPasswordlessLogin', 999);
 
     if ( is_wp_error( $user ) ) {
         return new \WP_Error('Login error', $user->get_error_message());
@@ -89,8 +99,6 @@ function switchAccount(){
   * @return bool|WP_User a WP_User object if the username matched an existing user, or false if it didn't
 */
 function allowPasswordlessLogin( $user, $username, $password ) {
-    session_start();
-
     if(isset($_POST['switch-account'])){
         $user   =  get_user_by( 'id', $_POST['switch-account'] );
 
