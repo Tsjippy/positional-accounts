@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
-- empty password error
 
 ### Updated
+
+## [10.0.8] - 2026-05-28
+
+
+### Fixed
+- empty password error
 
 ## [10.0.7] - 2026-05-26
 
