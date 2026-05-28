@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+- empty password error
 
 ### Updated
 
