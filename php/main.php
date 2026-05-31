@@ -37,7 +37,7 @@ function addConditionalAccountSettings($userId, $nonce){
             $linkedAccountIds	= [];
         }
 
-        echo TSJIPPY\userSelect("Link to an user account", true, false, '', 'linked_accounts', [], $linkedAccountIds, [1], 'select', '', true);
+        TSJIPPY\userSelect(title:"Link to an user account", onlyAdults:true, id: 'linked_accounts', userId: $linkedAccountIds, excludeIds:[1], multiple:true, echo: true);
         ?>
         <input type='submit' name='action' value='Link now' class='button small'>
     </form>
