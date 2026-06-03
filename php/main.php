@@ -18,18 +18,18 @@ function addConditionalAccountSettings($userId, $nonce){
     }
     ?>
     <form method='post'>
-        <input type='hidden' class='no-reset' name='user-id' value='<?php echo $userId;?>'>
-        <input type='hidden' class='no-reset' name='wp-2fa-nonce' value='<?php echo $nonce;?>'>
-        <input type='hidden' class='no-reset' name='type' value='<?php echo $type;?>'>
+        <input type='hidden' class='no-reset' name='user-id' value='<?php echo esc_attr($userId);?>'>
+        <input type='hidden' class='no-reset' name='wp-2fa-nonce' value='<?php echo esc_attr($nonce);?>'>
+        <input type='hidden' class='no-reset' name='type' value='<?php echo esc_attr($type);?>'>
 
-        Use the button below to switch this account to a <?php echo $type;?> account<br>
+        Use the button below to switch this account to a <?php echo esc_attr($type);?> account<br>
         <input type='submit' name='action' value='Change account type' class='button small'>
     </form>
     <br>
     
     <form method='post'>
-        <input type='hidden' class='no-reset' name='user-id' value='<?php echo $userId;?>'>
-        <input type='hidden' class='no-reset' name='wp-2fa-nonce' value='<?php echo $nonce;?>'>
+        <input type='hidden' class='no-reset' name='user-id' value='<?php echo esc_attr($userId);?>'>
+        <input type='hidden' class='no-reset' name='wp-2fa-nonce' value='<?php echo esc_attr($nonce);?>'>
 
         <?php
         $linkedAccountIds	= get_user_meta($userId, 'linked-accounts', true);
