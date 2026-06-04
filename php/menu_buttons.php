@@ -2,18 +2,18 @@
 namespace TSJIPPY\POSITIONALACCOUNTS;
 use TSJIPPY;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if ( ! defined('ABSPATH')) {
+    exit;
 }
 
 //TO DO
 // build switch account block
 
 //add switch account buttons
-add_filter('wp_nav_menu_items', __NAMESPACE__.'\menuItems', 1, 2);
+add_filter('wp_nav_menu_items', __NAMESPACE__ . '\menuItems', 1, 2);
 function menuItems($items, $args) {
     // We should add a switch menu item
-    if(!is_user_logged_in() || $args->menu->slug != 'primary-menu'){
+    if (!is_user_logged_in() || $args->menu->slug != 'primary-menu') {
         return $items;
     }
 
@@ -26,7 +26,7 @@ function menuItems($items, $args) {
     $profilePicture = TSJIPPY\displayProfilePicture($userId, [20, 20], false, false, false);
 
     $style      = '';
-    if(wp_is_mobile()){
+    if (wp_is_mobile()) {
         $style  = "style='width:100vw;'";
     }
 
@@ -35,23 +35,23 @@ function menuItems($items, $args) {
     $baseMenuItem   .= "</li>";
 
     $linkedAccountIds    = get_user_meta($userId, 'linked-accounts', true);
-    if(empty($linkedAccountIds)){
+    if (empty($linkedAccountIds)) {
         return $items;
     }
 
     wp_enqueue_script('tsjippy_positional_script');
 
-    foreach($linkedAccountIds as $linkedAccountId){
-        if(!is_numeric($linkedAccountId)){
+    foreach ($linkedAccountIds as $linkedAccountId) {
+        if (!is_numeric($linkedAccountId)) {
             continue;
         }
 
         $linkedAccountName  = get_user($linkedAccountId)->display_name;
-        if(!$linkedAccountName){
+        if (!$linkedAccountName) {
             return $items;
         }
 
-        if(!$profilePicture){
+        if (!$profilePicture) {
             $profilePicture = TSJIPPY\displayProfilePicture($linkedAccountId, [20, 20], true, false, false);
         }
 
@@ -59,7 +59,7 @@ function menuItems($items, $args) {
         $subItems   .= sprintf($baseMenuItem, $linkedAccountId, $linkedAccountName);
     }
 
-    if(empty($subItems)){
+    if (empty($subItems)) {
         return $items;
     }
 

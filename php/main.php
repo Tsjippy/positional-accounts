@@ -2,19 +2,19 @@
 namespace TSJIPPY\POSITIONALACCOUNTS;
 use TSJIPPY;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if ( ! defined('ABSPATH')) {
+    exit;
 }
 
-add_action('tsjippy-after-login-settings', __NAMESPACE__.'\addConditionalAccountSettings', 10, 2);
+add_action('tsjippy-after-login-settings', __NAMESPACE__ . '\addConditionalAccountSettings', 10, 2);
 
 /**
  * Prints the forms to change an account type and to link a positional account to a personal account
  */
-function addConditionalAccountSettings($userId, $nonce){
-    $type			= 'positional';
-    if(get_user_meta($userId, 'account-type', true) == 'positional'){
-        $type		= 'normal';
+function addConditionalAccountSettings($userId, $nonce) {
+    $type            = 'positional';
+    if (get_user_meta($userId, 'account-type', true) == 'positional') {
+        $type        = 'normal';
     }
     ?>
     <form method='post'>
@@ -26,15 +26,15 @@ function addConditionalAccountSettings($userId, $nonce){
         <input type='submit' name='action' value='Change account type' class='button small'>
     </form>
     <br>
-    
+
     <form method='post'>
         <input type='hidden' class='no-reset' name='user-id' value='<?php echo esc_attr($userId);?>'>
         <input type='hidden' class='no-reset' name='wp-2fa-nonce' value='<?php echo esc_attr($nonce);?>'>
 
         <?php
-        $linkedAccountIds	= get_user_meta($userId, 'linked-accounts', true);
-        if(empty($linkedAccountIds)){
-            $linkedAccountIds	= [];
+        $linkedAccountIds    = get_user_meta($userId, 'linked-accounts', true);
+        if (empty($linkedAccountIds)) {
+            $linkedAccountIds    = [];
         }
 
         TSJIPPY\userSelect(title:"Link to an user account", onlyAdults:true, id: 'linked_accounts', userId: $linkedAccountIds, excludeIds:[1], multiple:true, echo: true);
@@ -44,13 +44,13 @@ function addConditionalAccountSettings($userId, $nonce){
     <?php
 }
 
-add_action('tsjippy-login-settings-save', __NAMESPACE__.'\updateAccountType', 10, 2);
-function updateAccountType($userId, $name){
-    if($_REQUEST['action'] == 'Change account type'){
+add_action('tsjippy-login-settings-save', __NAMESPACE__ . '\updateAccountType', 10, 2);
+function updateAccountType($userId, $name) {
+    if ($_REQUEST['action'] == 'Change account type') {
         update_user_meta($userId, 'account-type', $_REQUEST['type']);
         echo "<div class='success'>Succesfully changed the account type for $name to {$_REQUEST['type']}</div>";
-    }elseif($_REQUEST['action'] == 'Link now'){
-        if(!is_array($_REQUEST['linked_accounts'])){
+    }elseif ($_REQUEST['action'] == 'Link now') {
+        if (!is_array($_REQUEST['linked_accounts'])) {
             return;
         }
 
@@ -58,14 +58,14 @@ function updateAccountType($userId, $name){
 
         // Remove old linked user if needed
         $oldLinkedUserIds = get_user_meta($userId, 'linked-accounts', true);
-        if(is_array($oldLinkedUserIds)){
+        if (is_array($oldLinkedUserIds)) {
             $removed    = array_diff($oldLinkedUserIds, $linkedAccountIds);
 
-            foreach($removed as $oldLinkedUserId){
+            foreach ($removed as $oldLinkedUserId) {
                 // An account can have multiple positional account linked to it
                 $oldLinkedAccountLinkedAccounts = get_user_meta($oldLinkedUserId, 'linked-accounts', true);
 
-                if(is_array($oldLinkedAccountLinkedAccounts) && in_array($userId, $oldLinkedAccountLinkedAccounts)){
+                if (is_array($oldLinkedAccountLinkedAccounts) && in_array($userId, $oldLinkedAccountLinkedAccounts)) {
                     unset($oldLinkedAccountLinkedAccounts[$userId]);
 
                     update_user_meta($oldLinkedUserId, 'linked-accounts', $oldLinkedAccountLinkedAccounts);
@@ -82,49 +82,49 @@ function updateAccountType($userId, $name){
         // A non-positional account can have multiple positional account linked to it
         $added    = array_diff($linkedAccountIds, $oldLinkedUserIds);
 
-        $displayName	= '';
+        $displayName    = '';
 
-        foreach($added as $newlyLinkedId){
+        foreach ($added as $newlyLinkedId) {
             $linkedAccountLinkedAccounts    = get_user_meta($newlyLinkedId, 'linked-accounts', true);
 
-            if(!is_array($linkedAccountLinkedAccounts)){
+            if (!is_array($linkedAccountLinkedAccounts)) {
                 $linkedAccountLinkedAccounts    = [];
             }
-            
+
             $linkedAccountLinkedAccounts[]  = $userId;
             update_user_meta($newlyLinkedId, 'linked-accounts', $linkedAccountLinkedAccounts);
 
-            if(!empty($displayName)){
+            if (!empty($displayName)) {
                 $displayName    .= ' & ';
             }
             $displayName    .= get_user($newlyLinkedId)->display_name;
         }
 
-        
+
         echo "<div class='success'>Succesfully linked the account for $name to the account of $displayName</div>";
     }
 }
 
-add_filter('tsjippy-generics-form', __NAMESPACE__.'\showPositionalForm', 10, 2);
-function showPositionalForm($html, $userId){
-    if(checkIfNormal('', $userId)){
+add_filter('tsjippy-generics-form', __NAMESPACE__ . '\showPositionalForm', 10, 2);
+function showPositionalForm($html, $userId) {
+    if (checkIfNormal('', $userId)) {
         return $html;
     }
 
-    $linkedAccountIds	= get_user_meta($userId, 'linked-accounts', true);
-    if(empty($linkedAccountIds)){
+    $linkedAccountIds    = get_user_meta($userId, 'linked-accounts', true);
+    if (empty($linkedAccountIds)) {
         $linkedAccountIds = [];
     }
-    
+
     $userNames  = [];
-    foreach($linkedAccountIds as $linkedAccountId){
-        $inkedUser			= get_user($linkedAccountId);
-        if(!empty($linkedAccountId) && $inkedUser){
-            $nameHtml			= $inkedUser->display_name;
-            if(function_exists('TSJIPPY\USERPAGES\getUserPageUrl')){
+    foreach ($linkedAccountIds as $linkedAccountId) {
+        $inkedUser            = get_user($linkedAccountId);
+        if (!empty($linkedAccountId) && $inkedUser) {
+            $nameHtml            = $inkedUser->display_name;
+            if (function_exists('TSJIPPY\USERPAGES\getUserPageUrl')) {
                 $url = TSJIPPY\maybeGetUserPageUrl($inkedUser->ID);
-                if($url){
-                    $nameHtml	= "<a href='$url' target='_blank'>$nameHtml</a>";
+                if ($url) {
+                    $nameHtml    = "<a href='$url' target='_blank'>$nameHtml</a>";
                 }
             }
 
@@ -132,57 +132,57 @@ function showPositionalForm($html, $userId){
         }
     }
 
-    if(empty($userNames)){
-        $html			   .= "<div class='warning'>This account is an positional account and should be linked to a normal user account.<br>Please do so on the 'Login Info' tab</div>";
+    if (empty($userNames)) {
+        $html               .= "<div class='warning'>This account is an positional account and should be linked to a normal user account.<br>Please do so on the 'Login Info' tab</div>";
     }else{
         $userNames          = implode(' & ', $userNames);
-        $html			   .= "<div class='warning'>This account is a positional account and is linked to $userNames</div>";
+        $html               .= "<div class='warning'>This account is a positional account and is linked to $userNames</div>";
     }
 
-    $html	.= do_shortcode("[formbuilder slug=positional_generic user-id=$userId]");
+    $html    .= do_shortcode("[formbuilder slug=positional_generic user-id=$userId]");
 
     return $html;
 }
 
 // Most forms do not apply to positional accounts
-add_filter('tsjippy-should-show-family-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
-add_filter('tsjippy-should-show-location-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
-add_filter('tsjippy-should-show-picture-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
-add_filter('tsjippy-should-show-security-form',__NAMESPACE__.'\checkIfNormal', 10, 2);
+add_filter('tsjippy-should-show-family-form',__NAMESPACE__ . '\checkIfNormal', 10, 2);
+add_filter('tsjippy-should-show-location-form',__NAMESPACE__ . '\checkIfNormal', 10, 2);
+add_filter('tsjippy-should-show-picture-form',__NAMESPACE__ . '\checkIfNormal', 10, 2);
+add_filter('tsjippy-should-show-security-form',__NAMESPACE__ . '\checkIfNormal', 10, 2);
 
 // no mandatory documents for positional accounts
-add_filter('tsjippy-must-read',__NAMESPACE__.'\checkIfNormal', 10, 2);
+add_filter('tsjippy-must-read',__NAMESPACE__ . '\checkIfNormal', 10, 2);
 
-function checkIfNormal( $isNormal, $userId=''){
+function checkIfNormal($isNormal, $userId='') {
     return getAccountType($userId) != 'positional';
 }
 
 // No recommended fields for positional user accounts
-add_filter("tsjippy_manadatory_html_filter", __NAMESPACE__.'\filterPositionalAccount', 10, 2);
-function filterPositionalAccount($html, $userId){
-	if(getAccountType($userId) == 'positional'){
-		return '';
-	}
+add_filter("tsjippy_manadatory_html_filter", __NAMESPACE__ . '\filterPositionalAccount', 10, 2);
+function filterPositionalAccount($html, $userId) {
+    if (getAccountType($userId) == 'positional') {
+        return '';
+    }
 
-	return $html;
+    return $html;
 }
 
-function getAccountType($userId=''){
-    if(!is_numeric($userId)){
+function getAccountType($userId='') {
+    if (!is_numeric($userId)) {
         $user       = wp_get_current_user();
         $userId     = $user->ID;
     }
-    
+
     return get_user_meta($userId, 'account-type', true);
 }
 
 // Show the details of the person linked to a positional account and not the positional account details
-add_filter('tsjippy-user-description-user-id', __NAMESPACE__.'\userDescriptionId');
-function userDescriptionId($userId){
+add_filter('tsjippy-user-description-user-id', __NAMESPACE__ . '\userDescriptionId');
+function userDescriptionId($userId) {
     $linkedAccountIds    = get_user_meta($userId, 'linked-accounts', true);
 
     // account is linked and the account still exists
-    if(is_array($linkedAccountIds) && get_user($linkedAccountIds[0])){
+    if (is_array($linkedAccountIds) && get_user($linkedAccountIds[0])) {
         return $linkedAccountIds[0];
     }
 
