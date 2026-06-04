@@ -1,8 +1,10 @@
 <?php
+
 namespace TSJIPPY\POSITIONALACCOUNTS;
+
 use TSJIPPY;
 
-if ( ! defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
@@ -11,25 +13,26 @@ add_action('tsjippy-after-login-settings', __NAMESPACE__ . '\addConditionalAccou
 /**
  * Prints the forms to change an account type and to link a positional account to a personal account
  */
-function addConditionalAccountSettings($userId, $nonce) {
+function addConditionalAccountSettings($userId, $nonce)
+{
     $type            = 'positional';
     if (get_user_meta($userId, 'account-type', true) == 'positional') {
         $type        = 'normal';
     }
-    ?>
+?>
     <form method='post'>
-        <input type='hidden' class='no-reset' name='user-id' value='<?php echo esc_attr($userId);?>'>
-        <input type='hidden' class='no-reset' name='wp-2fa-nonce' value='<?php echo esc_attr($nonce);?>'>
-        <input type='hidden' class='no-reset' name='type' value='<?php echo esc_attr($type);?>'>
+        <input type='hidden' class='no-reset' name='user-id' value='<?php echo esc_attr($userId); ?>'>
+        <input type='hidden' class='no-reset' name='wp-2fa-nonce' value='<?php echo esc_attr($nonce); ?>'>
+        <input type='hidden' class='no-reset' name='type' value='<?php echo esc_attr($type); ?>'>
 
-        Use the button below to switch this account to a <?php echo esc_attr($type);?> account<br>
+        Use the button below to switch this account to a <?php echo esc_attr($type); ?> account<br>
         <input type='submit' name='action' value='Change account type' class='button small'>
     </form>
     <br>
 
     <form method='post'>
-        <input type='hidden' class='no-reset' name='user-id' value='<?php echo esc_attr($userId);?>'>
-        <input type='hidden' class='no-reset' name='wp-2fa-nonce' value='<?php echo esc_attr($nonce);?>'>
+        <input type='hidden' class='no-reset' name='user-id' value='<?php echo esc_attr($userId); ?>'>
+        <input type='hidden' class='no-reset' name='wp-2fa-nonce' value='<?php echo esc_attr($nonce); ?>'>
 
         <?php
         $linkedAccountIds    = get_user_meta($userId, 'linked-accounts', true);
@@ -37,19 +40,20 @@ function addConditionalAccountSettings($userId, $nonce) {
             $linkedAccountIds    = [];
         }
 
-        TSJIPPY\userSelect(title:"Link to an user account", onlyAdults:true, id: 'linked_accounts', userId: $linkedAccountIds, excludeIds:[1], multiple:true, echo: true);
+        TSJIPPY\userSelect(title: "Link to an user account", onlyAdults: true, id: 'linked_accounts', userId: $linkedAccountIds, excludeIds: [1], multiple: true, echo: true);
         ?>
         <input type='submit' name='action' value='Link now' class='button small'>
     </form>
-    <?php
+<?php
 }
 
 add_action('tsjippy-login-settings-save', __NAMESPACE__ . '\updateAccountType', 10, 2);
-function updateAccountType($userId, $name) {
+function updateAccountType($userId, $name)
+{
     if ($_REQUEST['action'] == 'Change account type') {
         update_user_meta($userId, 'account-type', $_REQUEST['type']);
         echo "<div class='success'>Succesfully changed the account type for $name to {$_REQUEST['type']}</div>";
-    }elseif ($_REQUEST['action'] == 'Link now') {
+    } elseif ($_REQUEST['action'] == 'Link now') {
         if (!is_array($_REQUEST['linked_accounts'])) {
             return;
         }
@@ -71,7 +75,7 @@ function updateAccountType($userId, $name) {
                     update_user_meta($oldLinkedUserId, 'linked-accounts', $oldLinkedAccountLinkedAccounts);
                 }
             }
-        }else{
+        } else {
             $oldLinkedUserIds   = [];
         }
 
@@ -106,7 +110,8 @@ function updateAccountType($userId, $name) {
 }
 
 add_filter('tsjippy-generics-form', __NAMESPACE__ . '\showPositionalForm', 10, 2);
-function showPositionalForm($html, $userId) {
+function showPositionalForm($html, $userId)
+{
     if (checkIfNormal('', $userId)) {
         return $html;
     }
@@ -134,7 +139,7 @@ function showPositionalForm($html, $userId) {
 
     if (empty($userNames)) {
         $html               .= "<div class='warning'>This account is an positional account and should be linked to a normal user account.<br>Please do so on the 'Login Info' tab</div>";
-    }else{
+    } else {
         $userNames          = implode(' & ', $userNames);
         $html               .= "<div class='warning'>This account is a positional account and is linked to $userNames</div>";
     }
@@ -145,21 +150,23 @@ function showPositionalForm($html, $userId) {
 }
 
 // Most forms do not apply to positional accounts
-add_filter('tsjippy-should-show-family-form',__NAMESPACE__ . '\checkIfNormal', 10, 2);
-add_filter('tsjippy-should-show-location-form',__NAMESPACE__ . '\checkIfNormal', 10, 2);
-add_filter('tsjippy-should-show-picture-form',__NAMESPACE__ . '\checkIfNormal', 10, 2);
-add_filter('tsjippy-should-show-security-form',__NAMESPACE__ . '\checkIfNormal', 10, 2);
+add_filter('tsjippy-should-show-family-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
+add_filter('tsjippy-should-show-location-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
+add_filter('tsjippy-should-show-picture-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
+add_filter('tsjippy-should-show-security-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
 
 // no mandatory documents for positional accounts
-add_filter('tsjippy-must-read',__NAMESPACE__ . '\checkIfNormal', 10, 2);
+add_filter('tsjippy-must-read', __NAMESPACE__ . '\checkIfNormal', 10, 2);
 
-function checkIfNormal($isNormal, $userId='') {
+function checkIfNormal($isNormal, $userId = '')
+{
     return getAccountType($userId) != 'positional';
 }
 
 // No recommended fields for positional user accounts
 add_filter("tsjippy_manadatory_html_filter", __NAMESPACE__ . '\filterPositionalAccount', 10, 2);
-function filterPositionalAccount($html, $userId) {
+function filterPositionalAccount($html, $userId)
+{
     if (getAccountType($userId) == 'positional') {
         return '';
     }
@@ -167,7 +174,8 @@ function filterPositionalAccount($html, $userId) {
     return $html;
 }
 
-function getAccountType($userId='') {
+function getAccountType($userId = '')
+{
     if (!is_numeric($userId)) {
         $user       = wp_get_current_user();
         $userId     = $user->ID;
@@ -178,7 +186,8 @@ function getAccountType($userId='') {
 
 // Show the details of the person linked to a positional account and not the positional account details
 add_filter('tsjippy-user-description-user-id', __NAMESPACE__ . '\userDescriptionId');
-function userDescriptionId($userId) {
+function userDescriptionId($userId)
+{
     $linkedAccountIds    = get_user_meta($userId, 'linked-accounts', true);
 
     // account is linked and the account still exists

@@ -1,15 +1,18 @@
 <?php
+
 namespace TSJIPPY\POSITIONALACCOUNTS;
+
 use TSJIPPY;
 
-if ( ! defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
 add_action('rest_api_init', __NAMESPACE__ . '\bioRestApi');
-function bioRestApi() {
+function bioRestApi()
+{
     register_rest_route(
-        RESTAPIPREFIX. '/positional',
+        RESTAPIPREFIX . '/positional',
         '/switch_account',
         array(
             'methods'               => 'POST',
@@ -18,17 +21,18 @@ function bioRestApi() {
             'args'                    => array(
                 'switch-account'        => array(
                     'required'    => true
-               ),
+                ),
                 'nonce'        => array(
                     'required'    => true
-               ),
-           )
-       )
-   );
+                ),
+            )
+        )
+    );
 }
 
 
-function switchAccount() {
+function switchAccount()
+{
     // Check if valid request
     if (!isset($_POST['switch-account']) || !is_numeric($_POST['switch-account']) || !TSJIPPY\verifyNonce('nonce', 'tsjippy_switch_account')) {
         return;
@@ -40,11 +44,11 @@ function switchAccount() {
 
     // check if the current user has permission to switch to this account
     if (empty($linkedAccountIds) || !is_array($linkedAccountIds) || !in_array($_POST['switch-account'], $linkedAccountIds)) {
-        ?>
+?>
         <div class='error'>
             This account is not linked to your account!
         </div>
-        <?php
+<?php
     }
 
     TSJIPPY\storeInTransient('orgaccount', $user->ID);
@@ -72,7 +76,7 @@ function switchAccount() {
             'user_password' => '',
             'remember'      => true
         ]
-   );
+    );
 
     // Remove action to store the login cookie in $_COOKIE
     remove_action('set_logged_in_cookie', __NAMESPACE__ . '\storeInCookieVar');
@@ -80,7 +84,7 @@ function switchAccount() {
     // remove the filter to allow passwordless sign in
     remove_filter('authenticate', __NAMESPACE__ . '\allowPasswordlessLogin', 999);
 
-    if ( is_wp_error($user)) {
+    if (is_wp_error($user)) {
         return new \WP_Error('Login error', $user->get_error_message());
     }
 
@@ -88,17 +92,18 @@ function switchAccount() {
 }
 
 /**
-  * An 'authenticate' filter callback that authenticates the user using only the username.
-  *
-  * To avoid potential security vulnerabilities, this should only be used in the context of a programmatic login,
-  * and unhooked immediately after it fires.
-  *
-  * @param WP_User $user
-  * @param string $username
-  * @param string $password
-  * @return bool|WP_User a WP_User object if the username matched an existing user, or false if it didn't
-*/
-function allowPasswordlessLogin($user, $username, $password) {
+ * An 'authenticate' filter callback that authenticates the user using only the username.
+ *
+ * To avoid potential security vulnerabilities, this should only be used in the context of a programmatic login,
+ * and unhooked immediately after it fires.
+ *
+ * @param WP_User $user
+ * @param string $username
+ * @param string $password
+ * @return bool|WP_User a WP_User object if the username matched an existing user, or false if it didn't
+ */
+function allowPasswordlessLogin($user, $username, $password)
+{
     if (isset($_POST['switch-account'])) {
         $user   =  get_user_by('id', $_POST['switch-account']);
 
@@ -110,9 +115,10 @@ function allowPasswordlessLogin($user, $username, $password) {
 
 // function to update the $_COOKIE variable without refreshing the page
 // Needed to create a nonce after ajax login
-function storeInCookieVar($loggedInCookie, $expire, $expiration, $userId, $type, $token) {
+function storeInCookieVar($loggedInCookie, $expire, $expiration, $userId, $type, $token)
+{
     // make sure we only write the right cookie
     if (get_current_user_id() == $userId) {
-        $_COOKIE[ LOGGED_IN_COOKIE ] = $loggedInCookie;
+        $_COOKIE[LOGGED_IN_COOKIE] = $loggedInCookie;
     }
 }

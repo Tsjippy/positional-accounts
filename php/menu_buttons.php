@@ -1,8 +1,10 @@
 <?php
+
 namespace TSJIPPY\POSITIONALACCOUNTS;
+
 use TSJIPPY;
 
-if ( ! defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
@@ -11,7 +13,8 @@ if ( ! defined('ABSPATH')) {
 
 //add switch account buttons
 add_filter('wp_nav_menu_items', __NAMESPACE__ . '\menuItems', 1, 2);
-function menuItems($items, $args) {
+function menuItems($items, $args)
+{
     // We should add a switch menu item
     if (!is_user_logged_in() || $args->menu->slug != 'primary-menu') {
         return $items;
@@ -31,7 +34,7 @@ function menuItems($items, $args) {
     }
 
     $baseMenuItem   = "<li class='menu-item switch-account'>";
-        $baseMenuItem   .= "<button type='button' class='account-switcher' data-accountid='%d' data-nonce='$nonce' $style>Switch to %s</button>";
+    $baseMenuItem   .= "<button type='button' class='account-switcher' data-accountid='%d' data-nonce='$nonce' $style>Switch to %s</button>";
     $baseMenuItem   .= "</li>";
 
     $linkedAccountIds    = get_user_meta($userId, 'linked-accounts', true);
@@ -64,28 +67,29 @@ function menuItems($items, $args) {
     }
 
     ob_start();
-    ?>
+?>
     <style>
-        .account-switcher, .account-switcher:hover{
-            padding:            3px;
-            font-weight:        600;
-            border-radius:      7%;
-            background-color:   #fff;
-            color:              #515151;
-            font-size:          14px;
-            line-height:        40px;
+        .account-switcher,
+        .account-switcher:hover {
+            padding: 3px;
+            font-weight: 600;
+            border-radius: 7%;
+            background-color: #fff;
+            color: #515151;
+            font-size: 14px;
+            line-height: 40px;
         }
 
-        .account-switcher:hover{
-            text-decoration:                  underline;
-            text-decoration-color:            currentcolor;
-            -webkit-text-decoration-color:  #bd2919;
-            text-decoration-color:          #bd2919;
-                }
+        .account-switcher:hover {
+            text-decoration: underline;
+            text-decoration-color: currentcolor;
+            -webkit-text-decoration-color: #bd2919;
+            text-decoration-color: #bd2919;
+        }
     </style>
     <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children">
         <a href="/my-profile/">
-            <?php echo $profilePicture;?>
+            <?php echo $profilePicture; ?>
             <span role="presentation" class="dropdown-menu-toggle">
                 <span class="gp-icon icon-arrow">
                     <svg viewBox="0 0 330 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em">
@@ -95,10 +99,10 @@ function menuItems($items, $args) {
             </span>
         </a>
         <ul class="sub-menu" style='width: min-content;'>
-            <?php echo $subItems;?>
+            <?php echo $subItems; ?>
         </ul>
     </li>
-    <?php
+<?php
     $items  .= ob_get_clean();
 
     return $items;

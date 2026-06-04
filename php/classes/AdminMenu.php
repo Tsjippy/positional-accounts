@@ -1,14 +1,17 @@
 <?php
+
 namespace TSJIPPY\POSITIONALACCOUNTS;
+
 use TSJIPPY;
 
 use function TSJIPPY\addElement;
 
-if ( ! defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
-class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu{
+class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu
+{
 
     /**
      * AdminMenu constructor.
@@ -16,28 +19,32 @@ class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu{
      * @param array $settings The settings for the plugin
      * @param string $name The name of the plugin
      */
-    public function __construct($settings, $name) {
+    public function __construct($settings, $name)
+    {
         parent::__construct($settings, $name);
     }
 
-    public function settings($parent) {
+    public function settings($parent)
+    {
         return false;
     }
 
-    public function emails($parent) {
+    public function emails($parent)
+    {
         return false;
     }
 
-    public function data($parent='') {
+    public function data($parent = '')
+    {
         $args = array(
             'meta_query' => array(
                 array(
                     'key'         => 'account-type',
                     'value'     => 'positional',
                     'compare'     => '='
-               )
-           )
-       );
+                )
+            )
+        );
         $users      = get_users($args);
 
         if (empty($users)) {
@@ -94,7 +101,8 @@ class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu{
         return true;
     }
 
-    public function functions($parent) {
+    public function functions($parent)
+    {
 
         return false;
     }
