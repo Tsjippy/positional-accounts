@@ -12,7 +12,7 @@ add_action('rest_api_init', __NAMESPACE__ . '\bioRestApi');
 function bioRestApi()
 {
     register_rest_route(
-        RESTAPIPREFIX . '/positional',
+        TSJIPPY\RESTAPIPREFIX . '/positional',
         '/switch_account',
         array(
             'methods'               => 'POST',
