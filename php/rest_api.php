@@ -105,7 +105,7 @@ function switchAccount()
 function allowPasswordlessLogin($user, $username, $password)
 {
     if (isset($_POST['switch-account'])) {
-        $user   =  get_user_by('id', $_POST['switch-account']);
+        $user   =  get_user_by('id', (int) $_POST['switch-account']);
 
         return $user;
     }
