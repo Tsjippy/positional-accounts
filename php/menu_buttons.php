@@ -66,27 +66,10 @@ function menuItems($items, $args)
         return $items;
     }
 
+    wp_enqueue_style('tsjippy_positional_style', TSJIPPY\pathToUrl(TSJIPPY\PLUGINPATH . 'css/main.min.css'), array(), STYLEVERSION);
+
     ob_start();
 ?>
-    <style>
-        .account-switcher,
-        .account-switcher:hover {
-            padding: 3px;
-            font-weight: 600;
-            border-radius: 7%;
-            background-color: #fff;
-            color: #515151;
-            font-size: 14px;
-            line-height: 40px;
-        }
-
-        .account-switcher:hover {
-            text-decoration: underline;
-            text-decoration-color: currentcolor;
-            -webkit-text-decoration-color: #bd2919;
-            text-decoration-color: #bd2919;
-        }
-    </style>
     <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children">
         <a href="/my-profile/">
             <?php echo $profilePicture; ?>

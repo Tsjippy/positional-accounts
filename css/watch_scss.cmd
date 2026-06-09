@@ -1,0 +1,1 @@
+sass --style=compressed ".\main.scss" "main.min.css"
