@@ -13,6 +13,7 @@
 
 ### Fixed
 - spacing problem
+- use pluginversion
 
 ### Updated
 
