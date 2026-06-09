@@ -66,7 +66,7 @@ function menuItems($items, $args)
         return $items;
     }
 
-    wp_enqueue_style('tsjippy_positional_style', TSJIPPY\pathToUrl(TSJIPPY\PLUGINPATH . 'css/main.min.css'), array(), STYLEVERSION);
+    wp_enqueue_style('tsjippy_positional_style', TSJIPPY\pathToUrl(TSJIPPY\PLUGINPATH . 'css/main.min.css'), array(), PLUGINVERSION);
 
     ob_start();
 ?>
