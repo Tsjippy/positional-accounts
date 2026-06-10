@@ -70,7 +70,7 @@ class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu
 
 
         foreach ($users as $user) {
-            $linkedUserIds     = get_user_meta($user->ID, 'linked-accounts', true);
+            $linkedUserIds     = get_user_meta($user->ID, 'tsjippy_linked-accounts', true);
 
             $name            = "No user linked to this account <a href='$url$user->ID&main-tab=login-info'>Link now</a>";
 

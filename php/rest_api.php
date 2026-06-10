@@ -40,7 +40,7 @@ function switchAccount()
 
     // Get the linked accounts for the current user
     $user               = wp_get_current_user();
-    $linkedAccountIds   = get_user_meta($user->ID, 'linked-accounts', true);
+    $linkedAccountIds   = get_user_meta($user->ID, 'tsjippy_linked-accounts', true);
 
     // check if the current user has permission to switch to this account
     if (empty($linkedAccountIds) || !is_array($linkedAccountIds) || !in_array($_POST['switch-account'], $linkedAccountIds)) {
