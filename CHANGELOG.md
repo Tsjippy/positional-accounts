@@ -6,10 +6,15 @@
 ### Changed
 
 ### Fixed
-- shared code loader
-- activation hook
 
 ### Updated
+
+## [10.1.5] - 2026-06-13
+
+
+### Fixed
+- shared code loader
+- activation hook
 
 ## [10.1.4] - 2026-06-11
 
