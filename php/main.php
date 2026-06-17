@@ -8,7 +8,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-add_action('tsjippy-after-login-settings', __NAMESPACE__ . '\addConditionalAccountSettings', 10, 2);
+add_action('tsjippy-user-management-after-login-settings', __NAMESPACE__ . '\addConditionalAccountSettings', 10, 2);
 
 /**
  * Prints the forms to change an account type and to link a positional account to a personal account
@@ -47,7 +47,7 @@ function addConditionalAccountSettings($userId, $nonce)
 <?php
 }
 
-add_action('tsjippy-login-settings-save', __NAMESPACE__ . '\updateAccountType', 10, 2);
+add_action('tsjippy-user-management-login-settings-save', __NAMESPACE__ . '\updateAccountType', 10, 2);
 function updateAccountType($userId, $name)
 {
     if ($_REQUEST['action'] == 'Change account type') {
@@ -109,7 +109,7 @@ function updateAccountType($userId, $name)
     }
 }
 
-add_filter('tsjippy-generics-form', __NAMESPACE__ . '\showPositionalForm', 10, 2);
+add_filter('tsjippy-user-management-generics-form', __NAMESPACE__ . '\showPositionalForm', 10, 2);
 function showPositionalForm($html, $userId)
 {
     if (checkIfNormal('', $userId)) {
@@ -150,13 +150,13 @@ function showPositionalForm($html, $userId)
 }
 
 // Most forms do not apply to positional accounts
-add_filter('tsjippy-should-show-family-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
+add_filter('tsjippy-user-management-should-show-family-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
 add_filter('tsjippy-should-show-location-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
-add_filter('tsjippy-should-show-picture-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
+add_filter('tsjippy-user-management-should-show-picture-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
 add_filter('tsjippy-should-show-security-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
 
 // no mandatory documents for positional accounts
-add_filter('tsjippy-must-read', __NAMESPACE__ . '\checkIfNormal', 10, 2);
+add_filter('tsjippy-mandatory-must-read', __NAMESPACE__ . '\checkIfNormal', 10, 2);
 
 function checkIfNormal($isNormal, $userId = '')
 {
@@ -164,7 +164,7 @@ function checkIfNormal($isNormal, $userId = '')
 }
 
 // No recommended fields for positional user accounts
-add_filter("tsjippy-manadatory-html-filter", __NAMESPACE__ . '\filterPositionalAccount', 10, 2);
+add_filter("tsjippy-forms-manadatory-html-filter", __NAMESPACE__ . '\filterPositionalAccount', 10, 2);
 function filterPositionalAccount($html, $userId)
 {
     if (getAccountType($userId) == 'positional') {
@@ -185,7 +185,7 @@ function getAccountType($userId = '')
 }
 
 // Show the details of the person linked to a positional account and not the positional account details
-add_filter('tsjippy-user-description-user-id', __NAMESPACE__ . '\userDescriptionId');
+add_filter('tsjippy-user-pages-description-user-id', __NAMESPACE__ . '\userDescriptionId');
 function userDescriptionId($userId)
 {
     $linkedAccountIds    = get_user_meta($userId, 'tsjippy_linked-accounts', true);
