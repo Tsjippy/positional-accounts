@@ -8,6 +8,7 @@
 - prefix all hooks with plugin name
 
 ### Fixed
+- filters
 
 ### Updated
 
