@@ -151,9 +151,9 @@ function showPositionalForm($html, $userId)
 
 // Most forms do not apply to positional accounts
 add_filter('tsjippy-user-management-should-show-family-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
-add_filter('tsjippy-should-show-location-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
+add_filter('tsjippy-user-management-should-show-location-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
 add_filter('tsjippy-user-management-should-show-picture-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
-add_filter('tsjippy-should-show-security-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
+add_filter('tsjippy-user-management-should-show-security-form', __NAMESPACE__ . '\checkIfNormal', 10, 2);
 
 // no mandatory documents for positional accounts
 add_filter('tsjippy-mandatory-must-read', __NAMESPACE__ . '\checkIfNormal', 10, 2);
