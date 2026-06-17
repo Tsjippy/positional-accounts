@@ -44,16 +44,12 @@ function switchAccount()
 
     // check if the current user has permission to switch to this account
     if (empty($linkedAccountIds) || !is_array($linkedAccountIds) || !in_array($_POST['switch-account'], $linkedAccountIds)) {
-?>
+        ?>
         <div class='error'>
             This account is not linked to your account!
         </div>
-<?php
+        <?php
     }
-
-    TSJIPPY\storeInTransient('orgaccount', $user->ID);
-
-    session_write_close();
 
     // Logout the current user
     wp_destroy_current_session();
