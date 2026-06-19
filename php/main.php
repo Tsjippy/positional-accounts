@@ -58,7 +58,7 @@ function updateAccountType($userId, $name)
             return;
         }
 
-        $linkedAccountIds    = $_REQUEST['linked_accounts'];
+        $linkedAccountIds    = TSJIPPY\sanitize($_REQUEST['linked_accounts']);
 
         // Remove old linked user if needed
         $oldLinkedUserIds = get_user_meta($userId, 'tsjippy_linked-accounts', true);
