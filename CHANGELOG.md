@@ -4,12 +4,17 @@
 ### Added
 
 ### Changed
-- user meta storage
-- storage of linked accounts
 
 ### Fixed
 
 ### Updated
+
+## [10.2.9] - 2026-06-24
+
+
+### Changed
+- user meta storage
+- storage of linked accounts
 
 ## [10.2.7] - 2026-06-23
 
