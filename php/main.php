@@ -35,7 +35,7 @@ function addConditionalAccountSettings($userId, $nonce)
         <input type='hidden' class='no-reset' name='wp-2fa-nonce' value='<?php echo esc_attr($nonce); ?>'>
 
         <?php
-        $linkedAccountIds    = get_user_meta($userId, 'tsjippy_linked-accounts', true);
+        $linkedAccountIds    = get_user_meta($userId, 'tsjippy_linked_accounts');
         if (empty($linkedAccountIds)) {
             $linkedAccountIds    = [];
         }
@@ -61,18 +61,18 @@ function updateAccountType($userId, $name)
         $linkedAccountIds    = TSJIPPY\sanitize($_REQUEST['linked_accounts']);
 
         // Remove old linked user if needed
-        $oldLinkedUserIds = get_user_meta($userId, 'tsjippy_linked-accounts', true);
+        $oldLinkedUserIds = get_user_meta($userId, 'tsjippy_linked_accounts');
         if (is_array($oldLinkedUserIds)) {
             $removed    = array_diff($oldLinkedUserIds, $linkedAccountIds);
 
             foreach ($removed as $oldLinkedUserId) {
                 // An account can have multiple positional account linked to it
-                $oldLinkedAccountLinkedAccounts = get_user_meta($oldLinkedUserId, 'tsjippy_linked-accounts', true);
+                $oldLinkedAccountLinkedAccounts = get_user_meta($oldLinkedUserId, 'tsjippy_linked_accounts');
 
                 if (is_array($oldLinkedAccountLinkedAccounts) && in_array($userId, $oldLinkedAccountLinkedAccounts)) {
                     unset($oldLinkedAccountLinkedAccounts[$userId]);
 
-                    update_user_meta($oldLinkedUserId, 'tsjippy_linked-accounts', $oldLinkedAccountLinkedAccounts);
+                    update_user_meta($oldLinkedUserId, 'tsjippy_linked_accounts', $oldLinkedAccountLinkedAccounts);
                 }
             }
         } else {
@@ -80,7 +80,7 @@ function updateAccountType($userId, $name)
         }
 
         // Store the link in this account
-        update_user_meta($userId, 'tsjippy_linked-accounts', $linkedAccountIds);
+        update_user_meta($userId, 'tsjippy_linked_accounts', $linkedAccountIds);
 
         // Store the link in the target accounts
         // A non-positional account can have multiple positional account linked to it
@@ -89,14 +89,14 @@ function updateAccountType($userId, $name)
         $displayName    = '';
 
         foreach ($added as $newlyLinkedId) {
-            $linkedAccountLinkedAccounts    = get_user_meta($newlyLinkedId, 'tsjippy_linked-accounts', true);
+            $linkedAccountLinkedAccounts    = get_user_meta($newlyLinkedId, 'tsjippy_linked_accounts');
 
             if (!is_array($linkedAccountLinkedAccounts)) {
                 $linkedAccountLinkedAccounts    = [];
             }
 
             $linkedAccountLinkedAccounts[]  = $userId;
-            update_user_meta($newlyLinkedId, 'tsjippy_linked-accounts', $linkedAccountLinkedAccounts);
+            update_user_meta($newlyLinkedId, 'tsjippy_linked_accounts', $linkedAccountLinkedAccounts);
 
             if (!empty($displayName)) {
                 $displayName    .= ' & ';
@@ -116,7 +116,7 @@ function showPositionalForm($html, $userId)
         return $html;
     }
 
-    $linkedAccountIds    = get_user_meta($userId, 'tsjippy_linked-accounts', true);
+    $linkedAccountIds    = get_user_meta($userId, 'tsjippy_linked_accounts');
     if (empty($linkedAccountIds)) {
         $linkedAccountIds = [];
     }
@@ -188,7 +188,7 @@ function getAccountType($userId = '')
 add_filter('tsjippy-user-pages-description-user-id', __NAMESPACE__ . '\userDescriptionId');
 function userDescriptionId($userId)
 {
-    $linkedAccountIds    = get_user_meta($userId, 'tsjippy_linked-accounts', true);
+    $linkedAccountIds    = get_user_meta($userId, 'tsjippy_linked_accounts');
 
     // account is linked and the account still exists
     if (is_array($linkedAccountIds) && get_user($linkedAccountIds[0])) {

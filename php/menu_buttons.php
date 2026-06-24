@@ -37,7 +37,7 @@ function menuItems($items, $args)
     $baseMenuItem   .= "<button type='button' class='account-switcher' data-accountid='%d' data-nonce='$nonce' $style>Switch to %s</button>";
     $baseMenuItem   .= "</li>";
 
-    $linkedAccountIds    = get_user_meta($userId, 'tsjippy_linked-accounts', true);
+    $linkedAccountIds    = get_user_meta($userId, 'tsjippy_linked_accounts');
     if (empty($linkedAccountIds)) {
         return $items;
     }
