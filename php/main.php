@@ -19,7 +19,7 @@ function addConditionalAccountSettings($userId, $nonce)
     if (get_user_meta($userId, 'tsjippy_account-type', true) == 'positional') {
         $type        = 'normal';
     }
-?>
+    ?>
     <form method='post'>
         <input type='hidden' class='no-reset' name='user-id' value='<?php echo esc_attr($userId); ?>'>
         <input type='hidden' class='no-reset' name='wp-2fa-nonce' value='<?php echo esc_attr($nonce); ?>'>
@@ -50,62 +50,70 @@ function addConditionalAccountSettings($userId, $nonce)
 add_action('tsjippy-user-management-login-settings-save', __NAMESPACE__ . '\updateAccountType', 10, 2);
 function updateAccountType($userId, $name)
 {
+    // phpcs:ignore
     if ($_REQUEST['action'] == 'Change account type') {
-        update_user_meta($userId, 'tsjippy_account-type', $_REQUEST['type']);
-        echo "<div class='success'>Succesfully changed the account type for $name to {$_REQUEST['type']}</div>";
-    } elseif ($_REQUEST['action'] == 'Link now') {
-        if (!is_array($_REQUEST['linked_accounts'])) {
-            return;
-        }
-
-        $linkedAccountIds    = TSJIPPY\sanitize($_REQUEST['linked_accounts']);
+        // phpcs:ignore
+        $type   = TSJIPPY\sanitize($_REQUEST['type']);
+        update_user_meta($userId, 'tsjippy_account-type', $type);
+        
+        ?>
+        <div class='success'>
+            Succesfully changed the account type for <?php echo esc_html($name);?> to <?php echo esc_html($type);?>
+        </div>
+        <?php
+    } 
+    // phpcs:ignore
+    elseif ($_REQUEST['action'] == 'Link now') {
+        // phpcs:ignore
+        $linkedAccountIds = TSJIPPY\sanitize($_REQUEST['linked_accounts'] ?? []);
 
         // Remove old linked user if needed
         $oldLinkedUserIds = get_user_meta($userId, 'tsjippy_linked_accounts');
-        if (is_array($oldLinkedUserIds)) {
-            $removed    = array_diff($oldLinkedUserIds, $linkedAccountIds);
+        $removed          = array_diff($oldLinkedUserIds, $linkedAccountIds);
+        $displayName      = '';
 
-            foreach ($removed as $oldLinkedUserId) {
-                // An account can have multiple positional account linked to it
-                $oldLinkedAccountLinkedAccounts = get_user_meta($oldLinkedUserId, 'tsjippy_linked_accounts');
+        foreach ($removed as $oldLinkedUserId) {
+            // Delete from old target account
+            delete_user_meta($oldLinkedUserId, 'tsjippy_linked_accounts', $userId);
 
-                if (is_array($oldLinkedAccountLinkedAccounts) && in_array($userId, $oldLinkedAccountLinkedAccounts)) {
-                    unset($oldLinkedAccountLinkedAccounts[$userId]);
+            // Delete from current user account
+            delete_user_meta($userId, 'tsjippy_linked_accounts', $oldLinkedUserId);
 
-                    update_user_meta($oldLinkedUserId, 'tsjippy_linked_accounts', $oldLinkedAccountLinkedAccounts);
-                }
+            if (!empty($displayName)) {
+                $displayName    .= ' & ';
             }
-        } else {
-            $oldLinkedUserIds   = [];
+            $displayName    .= get_user($oldLinkedUserId)->display_name;
+
+            ?>
+            <div class='success'>
+                Succesfully unlinked the account for <?php echo esc_html($name);?> from the account of <?php echo esc_html($displayName);?>
+            </div>
+            <?php
         }
 
-        // Store the link in this account
-        update_user_meta($userId, 'tsjippy_linked_accounts', $linkedAccountIds);
-
-        // Store the link in the target accounts
-        // A non-positional account can have multiple positional account linked to it
-        $added    = array_diff($linkedAccountIds, $oldLinkedUserIds);
+        // Store the link
+        $added          = array_diff($linkedAccountIds, $oldLinkedUserIds);
 
         $displayName    = '';
 
         foreach ($added as $newlyLinkedId) {
-            $linkedAccountLinkedAccounts    = get_user_meta($newlyLinkedId, 'tsjippy_linked_accounts');
-
-            if (!is_array($linkedAccountLinkedAccounts)) {
-                $linkedAccountLinkedAccounts    = [];
-            }
-
-            $linkedAccountLinkedAccounts[]  = $userId;
-            update_user_meta($newlyLinkedId, 'tsjippy_linked_accounts', $linkedAccountLinkedAccounts);
+            // add to target account
+            add_user_meta($newlyLinkedId, 'tsjippy_linked_accounts', $userId);
+            
+            // add to own account
+            add_user_meta($userId, 'tsjippy_linked_accounts', $newlyLinkedId);
 
             if (!empty($displayName)) {
                 $displayName    .= ' & ';
             }
             $displayName    .= get_user($newlyLinkedId)->display_name;
+
+            ?>
+            <div class='success'>
+                Succesfully linked the account for <?php echo esc_html($name);?> to the account of <?php echo esc_html($displayName);?>
+            </div>
+            <?php
         }
-
-
-        echo "<div class='success'>Succesfully linked the account for $name to the account of $displayName</div>";
     }
 }
 
