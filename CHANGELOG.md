@@ -5,6 +5,7 @@
 
 ### Changed
 - user meta storage
+- storage of linked accounts
 
 ### Fixed
 
