@@ -4,6 +4,7 @@
 ### Added
 
 ### Changed
+- user meta storage
 
 ### Fixed
 
