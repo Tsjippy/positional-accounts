@@ -51,17 +51,6 @@ class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu
             return false;
         }
 
-        $url        = '';
-        if (defined('TSJIPPY\USERMANAGEMENT\SETTINGS')) {
-            $url   = get_permalink(TSJIPPY\USERMANAGEMENT\SETTINGS['user-edit-page'] ?? '');
-
-            if (!$url) {
-                $url = '';
-            }
-        }
-
-        $url        = "?user-id=";
-
         // Show a table with one positional account per row and all the accounts linked to it.
         $table  = addElement('table', $parent, ['class' => 'tsjippy table']);
         $tr     = addElement('tr', $table);
@@ -84,7 +73,10 @@ class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu
                 $tr     = addElement('tr', $table);
 
                 $td     = addElement('td', $tr);
-                addElement('a', $td, ['href' => "$url$user->ID&main-tab=login-info"], $user->display_name);
+
+                $url        = get_edit_profile_url($user->ID)."?user-id=$user->ID&main-tab=login-info";
+
+                addElement('a', $td, ['href' => $url], $user->display_name);
 
                 $td     = addElement('td', $tr);
                 if (!empty($names)) {
@@ -95,7 +87,7 @@ class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu
                 }else{
                     $td->append("No user linked to this account ");
                     addElement('br', $td);
-                    addElement('a', $td, ['href' => "$url$user->ID&main-tab=login-info"], 'Link now');
+                    addElement('a', $td, ['href' => $url], 'Link now');
                 }
             }
         }

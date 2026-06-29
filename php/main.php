@@ -133,11 +133,11 @@ function showPositionalForm($html, $userId)
     foreach ($linkedAccountIds as $linkedAccountId) {
         $inkedUser            = get_user($linkedAccountId);
         if (!empty($linkedAccountId) && $inkedUser) {
-            $nameHtml            = $inkedUser->display_name;
+            $nameHtml         = $inkedUser->display_name;
             if (function_exists('TSJIPPY\USERPAGES\getUserPageUrl')) {
-                $url = TSJIPPY\maybeGetUserPageUrl($inkedUser->ID);
+                $url          = get_author_posts_url($inkedUser->ID);
                 if ($url) {
-                    $nameHtml    = "<a href='$url' target='_blank'>$nameHtml</a>";
+                    $nameHtml = "<a href='$url' target='_blank'>$nameHtml</a>";
                 }
             }
 
