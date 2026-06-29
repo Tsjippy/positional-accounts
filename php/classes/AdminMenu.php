@@ -74,7 +74,7 @@ class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu
 
                 $td     = addElement('td', $tr);
 
-                $url        = get_edit_profile_url($user->ID)."?user-id=$user->ID&main-tab=login-info";
+                $url    = get_edit_profile_url($user->ID)."?user-id=$user->ID&main-tab=login-info";
 
                 addElement('a', $td, ['href' => $url], $user->display_name);
 
