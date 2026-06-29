@@ -71,8 +71,6 @@ class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu
         foreach ($users as $user) {
             $linkedUserIds = get_user_meta($user->ID, 'tsjippy_linked_accounts');
 
-            $name          = "No user linked to this account <a href='$url$user->ID&main-tab=login-info'>Link now</a>";
-
             if (is_array($linkedUserIds)) {
                 $names    = [];
                 foreach ($linkedUserIds as $linkedUserId) {
@@ -83,16 +81,22 @@ class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu
                     }
                 }
 
-                if (!empty($names)) {
-                    $name    = implode("\n", $names);
-                }
-
                 $tr     = addElement('tr', $table);
 
                 $td     = addElement('td', $tr);
                 addElement('a', $td, ['href' => "$url$user->ID&main-tab=login-info"], $user->display_name);
 
-                $td     = addElement('td', $tr, [], $name);
+                $td     = addElement('td', $tr);
+                if (!empty($names)) {
+                    foreach($names as $name){
+                        $td->append($name);
+                        addElement('br', $td);
+                    }
+                }else{
+                    $td->append("No user linked to this account ");
+                    addElement('br', $td);
+                    addElement('a', $td, ['href' => "$url$user->ID&main-tab=login-info"], 'Link now');
+                }
             }
         }
 
