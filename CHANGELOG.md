@@ -8,6 +8,7 @@
 
 ### Fixed
 - admin menu
+- rest api bug
 
 ### Updated
 
