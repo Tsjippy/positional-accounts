@@ -2,6 +2,17 @@
 ## [Unreleased] - yyyy-mm-dd
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Updated
+
+## [10.3.2] - 2026-07-02
+
+
+### Added
 - activate shared code function
 
 ### Changed
@@ -10,8 +21,6 @@
 ### Fixed
 - admin menu
 - rest api bug
-
-### Updated
 
 ## [10.3.1] - 2026-06-26
 
