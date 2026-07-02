@@ -12,6 +12,9 @@ add_action('tsjippy-user-management-after-login-settings', __NAMESPACE__ . '\add
 
 /**
  * Prints the forms to change an account type and to link a positional account to a personal account
+ * 
+ * @param int $userId The user id of the account
+ * @param string $nonce The nonce for the form
  */
 function addConditionalAccountSettings($userId, $nonce)
 {
@@ -48,6 +51,12 @@ function addConditionalAccountSettings($userId, $nonce)
 }
 
 add_action('tsjippy-user-management-login-settings-save', __NAMESPACE__ . '\updateAccountType', 10, 2);
+/**
+ * Updates the account type and linked accounts for a user
+ *
+ * @param int $userId The user id of the account
+ * @param string $name The name of the account
+ */
 function updateAccountType($userId, $name)
 {
     // phpcs:ignore
@@ -118,6 +127,14 @@ function updateAccountType($userId, $name)
 }
 
 add_filter('tsjippy-user-management-generics-form', __NAMESPACE__ . '\showPositionalForm', 10, 2);
+/**
+ * Shows the generic form for positional accounts
+ *
+ * @param string $html The html of the form
+ * @param int $userId The user id of the account
+ *
+ * @return string The html of the form
+ */
 function showPositionalForm($html, $userId)
 {
     if (checkIfNormal('', $userId)) {
@@ -165,7 +182,14 @@ add_filter('tsjippy-user-management-should-show-security-form', __NAMESPACE__ . 
 
 // no mandatory documents for positional accounts
 add_filter('tsjippy-mandatory-must-read', __NAMESPACE__ . '\checkIfNormal', 10, 2);
-
+/**
+ * Checks if the account is a normal account
+ *
+ * @param bool $isNormal Whether the account is normal
+ * @param int $userId The user id of the account
+ *
+ * @return bool Whether the account is normal
+ */
 function checkIfNormal($isNormal, $userId = '')
 {
     return getAccountType($userId) != 'positional';
@@ -173,6 +197,14 @@ function checkIfNormal($isNormal, $userId = '')
 
 // No recommended fields for positional user accounts
 add_filter("tsjippy-forms-manadatory-html-filter", __NAMESPACE__ . '\filterPositionalAccount', 10, 2);
+/**
+ * Filters the html for positional accounts
+ *
+ * @param string $html The html of the form
+ * @param int $userId The user id of the account
+ *
+ * @return string The html of the form
+ */
 function filterPositionalAccount($html, $userId)
 {
     if (getAccountType($userId) == 'positional') {
@@ -182,6 +214,13 @@ function filterPositionalAccount($html, $userId)
     return $html;
 }
 
+/**
+ * Gets the account type for a user
+ *
+ * @param int $userId The user id of the account
+ *
+ * @return string The account type
+ */
 function getAccountType($userId = '')
 {
     if (!is_numeric($userId)) {
@@ -194,6 +233,13 @@ function getAccountType($userId = '')
 
 // Show the details of the person linked to a positional account and not the positional account details
 add_filter('tsjippy-user-pages-description-user-id', __NAMESPACE__ . '\userDescriptionId');
+/**
+ * Gets the user id of the account to show in the description
+ *
+ * @param int $userId The user id of the account
+ *
+ * @return int The user id of the account to show in the description
+ */
 function userDescriptionId($userId)
 {
     $linkedAccountIds    = get_user_meta($userId, 'tsjippy_linked_accounts');

@@ -13,6 +13,13 @@ if (! defined('ABSPATH')) {
 
 //add switch account buttons
 add_filter('wp_nav_menu_items', __NAMESPACE__ . '\menuItems', 1, 2);
+/**
+ * Add switch account buttons to the menu items.
+ *
+ * @param string $items The HTML list content for the menu items.
+ * @param object $args An object containing wp_nav_menu() arguments.
+ * @return string The modified HTML list content for the menu items.
+ */
 function menuItems($items, $args)
 {
     // We should add a switch menu item
