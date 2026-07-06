@@ -17,7 +17,9 @@ function bioRestApi()
         array(
             'methods'               => 'POST',
             'callback'              => __NAMESPACE__ . '\switchAccount',
-            'permission_callback'   => '__return_true',
+            'permission_callback'   => function(){
+                return current_user_can('read');
+            },
             'args'                    => array(
                 'switch-account'        => array(
                     'required'    => true
