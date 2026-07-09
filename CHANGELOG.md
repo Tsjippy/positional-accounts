@@ -5,6 +5,7 @@
 - rest api permission check
 
 ### Changed
+- render form directly without do_shortcode call
 
 ### Fixed
 
