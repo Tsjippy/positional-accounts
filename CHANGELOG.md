@@ -2,14 +2,21 @@
 ## [Unreleased] - yyyy-mm-dd
 
 ### Added
-- rest api permission check
 
 ### Changed
-- render form directly without do_shortcode call
 
 ### Fixed
 
 ### Updated
+
+## [10.3.6] - 2026-07-10
+
+
+### Added
+- rest api permission check
+
+### Changed
+- render form directly without do_shortcode call
 
 ## [10.3.5] - 2026-07-06
 
