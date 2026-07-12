@@ -24,16 +24,36 @@ class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu
         parent::__construct($settings, $name);
     }
 
+    /**
+     * Add the settings page to the admin menu
+     *
+     * @param string $parent The parent menu slug
+     * @return bool True if the settings page was added, false otherwise
+     */
     public function settings($parent)
     {
         return false;
     }
 
+    /**
+     * Function to display the emails page
+     *
+     * @param   string  $parent The parent menu slug
+     * 
+     * @return  bool            True if the emails page was displayed, false otherwise
+     */
     public function emails($parent)
     {
         return false;
     }
 
+    /**
+     * Add the data page to the admin menu
+     *
+     * @param string $parent The parent menu slug
+     * 
+     * @return bool True if the data page was added, false otherwise
+     */
     public function data($parent = '')
     {
         $args = array(
@@ -95,6 +115,13 @@ class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu
         return true;
     }
 
+    /**
+     * Add the functions page to the admin menu
+     *
+     * @param string $parent The parent menu slug
+     * 
+     * @return bool True if the functions page was added, false otherwise
+     */
     public function functions($parent)
     {
 
