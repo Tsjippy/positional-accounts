@@ -60,9 +60,8 @@ class AdminMenu extends TSJIPPY\ADMIN\SubAdminMenu
         $args = array(
             'meta_query' => array(
                 array(
-                    'key'       => 'tsjippy_account-type',
-                    'value'     => 'positional',
-                    'compare'   => '='
+                    'key'     => 'tsjippy_account-type',
+                    'compare' => 'EXISTS'
                 )
             )
         );

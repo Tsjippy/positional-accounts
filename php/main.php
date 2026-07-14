@@ -19,7 +19,7 @@ add_action('tsjippy-user-management-after-login-settings', __NAMESPACE__ . '\add
 function addConditionalAccountSettings($userId, $nonce)
 {
     $type            = 'positional';
-    if (get_user_meta($userId, 'tsjippy_account-type', true) == 'positional') {
+    if (isPositionalAccount($userId)) {
         $type        = 'normal';
     }
     ?>
@@ -54,8 +54,8 @@ add_action('tsjippy-user-management-login-settings-save', __NAMESPACE__ . '\upda
 /**
  * Updates the account type and linked accounts for a user
  *
- * @param int $userId The user id of the account
- * @param string $name The name of the account
+ * @param int    $userId The user id of the account
+ * @param string $name   The name of the account
  */
 function updateAccountType($userId, $name)
 {
@@ -63,7 +63,12 @@ function updateAccountType($userId, $name)
     if ($_REQUEST['action'] == 'Change account type') {
         // phpcs:ignore
         $type   = TSJIPPY\sanitize($_REQUEST['type']);
-        update_user_meta($userId, 'tsjippy_account-type', $type);
+
+        if($type == 'positional'){
+            update_user_meta($userId, 'tsjippy_account-type', $type);
+        }else{
+            delete_user_meta($userId, 'tsjippy_account-type');
+        }
         
         ?>
         <div class='success'>
@@ -196,7 +201,7 @@ add_filter('tsjippy-mandatory-must-read', __NAMESPACE__ . '\checkIfNormal', 10, 
  */
 function checkIfNormal($isNormal, $userId = '')
 {
-    return getAccountType($userId) != 'positional';
+    return !isPositionalAccount($userId);
 }
 
 // No recommended fields for positional user accounts
@@ -211,7 +216,7 @@ add_filter("tsjippy-forms-manadatory-html-filter", __NAMESPACE__ . '\filterPosit
  */
 function filterPositionalAccount($html, $userId)
 {
-    if (getAccountType($userId) == 'positional') {
+    if (isPositionalAccount($userId)) {
         return '';
     }
 
@@ -219,20 +224,20 @@ function filterPositionalAccount($html, $userId)
 }
 
 /**
- * Gets the account type for a user
+ * Checks if positional account
  *
  * @param int $userId The user id of the account
  *
- * @return string The account type
+ * @return bool true if account is a positional account
  */
-function getAccountType($userId = '')
+function isPositionalAccount($userId = '')
 {
     if (!is_numeric($userId)) {
         $user       = wp_get_current_user();
         $userId     = $user->ID;
     }
 
-    return get_user_meta($userId, 'tsjippy_account-type', true);
+    return get_user_meta($userId, 'tsjippy_account-type', true) == 'postional';
 }
 
 // Show the details of the person linked to a positional account and not the positional account details
