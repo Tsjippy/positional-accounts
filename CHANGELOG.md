@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+- meta typo
 
 ### Updated
 
