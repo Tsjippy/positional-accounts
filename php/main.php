@@ -237,7 +237,7 @@ function isPositionalAccount($userId = '')
         $userId     = $user->ID;
     }
 
-    return get_user_meta($userId, 'tsjippy_account-type', true) == 'postional';
+    return get_user_meta($userId, 'tsjippy_account-type', true) == 'positional';
 }
 
 // Show the details of the person linked to a positional account and not the positional account details
