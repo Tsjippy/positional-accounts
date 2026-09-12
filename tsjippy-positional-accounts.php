@@ -10,11 +10,10 @@ namespace TSJIPPY\POSITIONALACCOUNTS;
  * AuthorURI:            harmseninnigeria.nl
  * Requires at least:    6.3
  * Requires PHP:         8.3
- * Tested up to:         7.1
- * Plugin URI:            https://github.com/Tsjippy/positionalaccounts
+ * Plugin URI:           https://github.com/Tsjippy/positionalaccounts
  * Tested:               7.1
- * TextDomain:            tsjippy
- * Requires Plugins:    , tsjippy-forms
+ * TextDomain:           tsjippy
+ * Requires Plugins:     tsjippy-forms
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
