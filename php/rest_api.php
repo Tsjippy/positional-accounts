@@ -32,7 +32,9 @@ function bioRestApi()
     );
 }
 
-
+/**
+ * login to another account
+ */
 function switchAccount()
 {
     // Check if valid request
