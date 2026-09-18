@@ -49,7 +49,7 @@ function menuItems($items, $args)
         return $items;
     }
 
-    wp_enqueue_script('tsjippy_positional_script');
+    wp_enqueue_script_module('@tsjippy/positional_script');
 
     foreach ($linkedAccountIds as $linkedAccountId) {
         if (!is_numeric($linkedAccountId)) {

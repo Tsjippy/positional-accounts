@@ -1,5 +1,10 @@
 import { webAuthVerification } from "./../../tsjippy-login/js/partials/webauth.js";
 
+import{
+  fetchRestApi
+} from "../../tsjippy-forms/js/form_submit_functions.js";
+
+
 async function verifyAccountSwitch(target) {
   let targetAccountId = target.dataset.accountid;
   let nonce = target.dataset.nonce;
@@ -13,7 +18,7 @@ async function verifyAccountSwitch(target) {
 
     formData.append("nonce", nonce);
 
-    let response = await FormSubmit.fetchRestApi(
+    let response = await fetchRestApi(
       "positional/switch_account",
       formData,
     );
