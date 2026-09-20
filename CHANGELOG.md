@@ -8,6 +8,7 @@
 - js update
 
 ### Fixed
+- enqueue bug
 
 ### Updated
 
