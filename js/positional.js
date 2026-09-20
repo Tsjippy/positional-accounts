@@ -4,12 +4,19 @@ import{
   fetchRestApi
 } from "../../tsjippy-forms/js/form_submit_functions.js";
 
+import { 
+  showLoader 
+} from "../../tsjippy-shared-functionality/js/partials/show_loader.js";
+
+import { 
+  displayMessage 
+} from "../../tsjippy-shared-functionality/js/partials/display_message.js";
 
 async function verifyAccountSwitch(target) {
   let targetAccountId = target.dataset.accountid;
   let nonce = target.dataset.nonce;
 
-  let loader = Main.showLoader(target);
+  let loader = showLoader(target);
 
   if (await webAuthVerification(targetAccountId)) {
     let formData = new FormData();
@@ -24,7 +31,7 @@ async function verifyAccountSwitch(target) {
     );
 
     if (response) {
-      Main.displayMessage(response);
+      displayMessage(response);
 
       window.location.href = window.location.href;
 
@@ -32,7 +39,7 @@ async function verifyAccountSwitch(target) {
     }
   }
 
-  Main.displayMessage(
+  displayMessage(
     "Passkey login for the account failed.\nLogging out...",
     "error",
   );
