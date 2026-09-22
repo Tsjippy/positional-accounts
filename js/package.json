@@ -1,11 +1,12 @@
 {
-  "name": "forms",
+  "name": "positional",
   "version": "1.0.0",
-  "description": "Forms",
-  "main": "./forms.js",
+  "description": "positional",
+  "main": "./positional.js",
   "scripts": {
-    "build": "webpack --entry ./positional.js --output-path . --output-filename positional.min.js --progress --mode=production --devtool source-map",
-    "all": "run-p build"
+    "build": "webpack --progress",
+    "watch": "webpack --watch --progress",
+    "all": "npm run build"
   },
   "author": "Ewald Harmsen",
   "license": "ISC",
