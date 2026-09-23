@@ -5,13 +5,13 @@ namespace TSJIPPY\POSITIONALACCOUNTS;
 /**
  * Plugin Name:          Tsjippy Positional Account
  * Description:          This plugin adds the folowing benefits: * Roles and permissions can be added to a function and not to a person * Content can be published by a person. * When another user takes on the function you link his account to the positional account so they immideate access to all content and permissions of the old person.
- * Version:              10.6.7
+ * Version:              10.6.8
  * Author:               Ewald Harmsen
  * AuthorURI:            harmseninnigeria.nl
  * Requires at least:    6.3
  * Requires PHP:         8.3
  * Plugin URI:           https://github.com/Tsjippy/positionalaccounts
- * Tested:               7.1.1
+ * Tested:               7.1.2
  * TextDomain:           tsjippy
  * Requires Plugins:     tsjippy-forms
  * License: GPLv2 or later
