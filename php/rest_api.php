@@ -97,10 +97,10 @@ function switchAccount()
  * To avoid potential security vulnerabilities, this should only be used in the context of a programmatic login,
  * and unhooked immediately after it fires.
  *
- * @param WP_User $user
- * @param string $username
- * @param string $password
- * @return bool|WP_User a WP_User object if the username matched an existing user, or false if it didn't
+ * @param \WP_User  $user
+ * @param string    $username
+ * @param string    $password
+ * @return bool|\WP_User        a WP_User object if the username matched an existing user, or false if it didn't
  */
 function allowPasswordlessLogin($user, $username, $password)
 {
@@ -113,8 +113,17 @@ function allowPasswordlessLogin($user, $username, $password)
     return $user;
 }
 
-// function to update the $_COOKIE variable without refreshing the page
-// Needed to create a nonce after ajax login
+/**
+ * function to update the $_COOKIE variable without refreshing the page
+ * Needed to create a nonce after ajax login
+ * 
+ * @param mixed $loggedInCookie
+ * @param mixed $expire
+ * @param mixed $expiration
+ * @param int   $userId
+ * @param mixed $type
+ * @param mixed $token
+ */
 function storeInCookieVar($loggedInCookie, $expire, $expiration, $userId, $type, $token)
 {
     // make sure we only write the right cookie
