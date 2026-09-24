@@ -59,7 +59,7 @@ console.log("Positional accounts script loaded");
 
 document.addEventListener("click", function (event) {
   if (event.target.matches(`.account-switcher`)) {
-    event.stopImmediatePropagation();
+    event.stopPropagation();
     verifyAccountSwitch(event.target);
   }
 });
